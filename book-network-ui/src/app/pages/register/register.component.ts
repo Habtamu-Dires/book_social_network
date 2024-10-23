@@ -29,7 +29,7 @@ export class RegisterComponent {
       body: this.registerRequest
     }).subscribe({
      next:() =>{
-      // this.router.navigate(['activate-account']);
+      this.router.navigate(['activate-account']);
      },
      error:(err) =>{
       console.log(err);
