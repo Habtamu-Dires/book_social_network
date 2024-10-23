@@ -21,7 +21,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup JDK
-        uses: actions/setup-jdk@v4
+        uses: actions/setup-java@v4
         with:
           java-version: 21
           distribution: 'corretto'
@@ -30,10 +30,10 @@ jobs:
         run: |
           cd book-network
           ./mvnw clean compile
-
-
   
-
+  
+  
+  
 
   unit-tests:
     runs-on: ubuntu-latest
@@ -45,7 +45,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup JDK
-        uses: actions/setup-jdk@v4
+        uses: actions/setup-java@v4
         with:
           java-version: 21
           distribution: 'corretto'
@@ -68,7 +68,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup JDK
-        uses: actions/setup-jdk@v4
+        uses: actions/setup-java@v4
         with:
           java-version: 21
           distribution: 'corretto'
@@ -77,12 +77,12 @@ jobs:
         run: |
           cd book-network
           ./mvnw clean package
-          
- 
- 
- 
-
-
+  
+  
+  
+  
+  
+  
 
   build-image:
     name: build docker image
@@ -95,7 +95,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup JDK
-        uses: actions/setup-jdk@v4
+        uses: actions/setup-java@v4
         with:
           java-version: 21
           distribution: 'corretto'
