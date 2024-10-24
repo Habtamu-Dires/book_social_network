@@ -27,7 +27,7 @@ services:
 
   bsn-ui:
     container_name: bsn-ui
-    image: habtamudires/bsn-ui
+    image: habtamudires/bsn-ui:latest
     ports:
       - 8080:80
     networks:
