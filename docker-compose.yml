@@ -17,7 +17,7 @@ services:
 
   bsn-api:
     container_name: bsn-api
-    image: bsn/bsn-api:1.0.0
+    image: habtamudires/bsn-api
     ports:
       - 8088:8088
     networks:
@@ -27,7 +27,7 @@ services:
 
   bsn-ui:
     container_name: bsn-ui
-    image: bsn/bsn-ui:1.0.0
+    image: habtamudires/bsn-ui
     ports:
       - 8080:80
     networks:
