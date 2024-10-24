@@ -15,16 +15,9 @@ services:
       - spring-demo
     restart: unless-stopped
 
-  mail-dev:
-    container_name: mail-dev-bsn
-    image: maildev/maildev
-    ports:
-      - 1080:1080
-      - 1025:1025
-
   bsn-api:
-    container_name: bsn_api
-    image: bsn/bsn:1.0.2
+    container_name: bsn-api
+    image: habtamudires/bsn-api:latest
     ports:
       - 8088:8088
     networks:
@@ -34,7 +27,7 @@ services:
 
   bsn-ui:
     container_name: bsn-ui
-    image: bsn/bsn-ui:1.0.2
+    image: habtamudires/bsn-ui:latest
     ports:
       - 8080:80
     networks:
