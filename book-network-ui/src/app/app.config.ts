@@ -1,9 +1,14 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
 import { httpTokenInterceptor } from './services/interceptor/http-token.interceptor';
+import { KeycloakService } from './services/keycloak/keycloak.service';
+
+export function kcFactory(kcService:KeycloakService) {
+  return () => kcService.init();
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -11,6 +16,17 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(
       withInterceptors([httpTokenInterceptor])
-    )
+    ),
+    {
+      provide: APP_INITIALIZER,
+      deps: [KeycloakService],
+      useFactory: kcFactory,
+      multi: true 
+    },
+    {
+      provide: HTTP_INTERCEPTORS, 
+      useValue: httpTokenInterceptor,
+      multi: true 
+    }
   ]
 };

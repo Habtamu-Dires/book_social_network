@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TokenService } from '../../../../services/token/token.service';
 import { Router } from '@angular/router';
 import { RouterLink, RouterOutlet } from '@angular/router';
+import { KeycloakService } from '../../../../services/keycloak/keycloak.service';
 
 @Component({
   selector: 'app-menu',
@@ -13,7 +14,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 export class MenuComponent implements OnInit{
 
   constructor(
-    private tokenService:TokenService,
+    private keycloakService: KeycloakService,
     private router:Router
   ){}
 
@@ -31,7 +32,8 @@ export class MenuComponent implements OnInit{
   }
 
   logout() {
-    this.tokenService.removeToken();
-    window.location.reload();
+    this.keycloakService.logout();
   }
+
+  
 }

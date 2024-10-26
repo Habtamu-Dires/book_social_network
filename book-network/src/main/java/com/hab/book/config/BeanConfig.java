@@ -26,12 +26,12 @@ import static org.springframework.http.HttpHeaders.*;
 @RequiredArgsConstructor
 public class BeanConfig {
 
-    private final UserDetailsService userDetailsService;
+    //private final UserDetailsService userDetailsService;
 
     @Value("${application.cors.origins:*}")  //* not recommend as it allows any
     private List<String> allowedOrigins;
 
-    @Bean
+    /*@Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
@@ -47,10 +47,10 @@ public class BeanConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
        return config.getAuthenticationManager();
-    }
+    }*/
 
     @Bean
-    public AuditorAware<Integer> auditorAware(){
+    public AuditorAware<String> auditorAware(){
         return new ApplicationAuditAware();
     }
 

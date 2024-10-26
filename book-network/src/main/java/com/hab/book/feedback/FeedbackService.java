@@ -33,9 +33,9 @@ public class FeedbackService {
         if(book.isArchived() || !book.isSharable()){
             throw new OperationNotPermittedException("You can not give feedback for archived / non sharable book");
         }
-        User user = ((User)connectedUser.getPrincipal());
+//        User user = ((User)connectedUser.getPrincipal());
 
-        if(Objects.equals(book.getOwner().getId(), user.getId())){
+        if(Objects.equals(book.getCreatedBy(), connectedUser.getName())){
             throw new OperationNotPermittedException("You can give feedback to your own book");
         }
 
