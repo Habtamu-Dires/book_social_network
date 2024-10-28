@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { BookResponse, PageResponseBorrowedBookResponse } from '../../../../services/models';
 import { BookService } from '../../../../services/services';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-returned-books',
@@ -15,11 +16,10 @@ export class ReturnedBooksComponent implements OnInit{
   size:number = 3;
   pages:Array<number> = []
   returnedBooks:PageResponseBorrowedBookResponse= {}
-  level:string = 'success';
-  message:string = '';
 
   constructor(
-    private bookService:BookService
+    private bookService:BookService,
+    private toastrService: ToastrService
   ){}
 
   ngOnInit(): void {
@@ -46,13 +46,11 @@ export class ReturnedBooksComponent implements OnInit{
         'book-id': book.id as number
       }).subscribe({
         next: () => {
-          this.message = 'Return approved successfully'
-          this.level = 'success'
+          this.toastrService.success('Return approved successfully', 'Done!')
           this.findAllReturnedBooks();
         },
         error:(err) => {
-          this.message = err.error.error;
-          this.level = 'error';
+          this.toastrService.error(err.error.error, 'Oops');
         }
       })
   }

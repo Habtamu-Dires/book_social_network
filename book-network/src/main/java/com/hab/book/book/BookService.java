@@ -5,7 +5,9 @@ import com.hab.book.exception.OperationNotPermittedException;
 import com.hab.book.file.FileStorageService;
 import com.hab.book.history.BookTransactionHistory;
 import com.hab.book.history.BookTransactionHistoryRepository;
-import com.hab.book.user.User;
+import com.hab.book.notification.Notification;
+import com.hab.book.notification.NotificationService;
+import com.hab.book.notification.NotificationStatus;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.hab.book.book.BookSpecification.withOwnerId;
+import static com.hab.book.notification.NotificationStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +32,7 @@ public class BookService {
     private final BookMapper bookMapper;
     private final BookTransactionHistoryRepository transactionHistoryRepository;
     private final FileStorageService fileStorageService;
+    private final NotificationService notificationService;
 
     public Integer save(BookRequest request, Authentication connectedUser) {
 //        User user = ((User) connectedUser.getPrincipal());
@@ -193,7 +197,19 @@ public class BookService {
                        .returnApproved(false)
                        .build();
 
-       return transactionHistoryRepository.save(bookTransactionHistory).getId();
+       var saved = transactionHistoryRepository.save(bookTransactionHistory);
+       //send notification
+        notificationService.sendNotification(
+                book.getCreatedBy(),
+                Notification.builder()
+                        .status(BORROWED)
+                        .message("Your Book has been borrowed")
+                        .bookTitle(book.getTitle())
+                        .build()
+        );
+
+       return  saved.getId();
+
     }
 
     public Integer returnBorrowedBook(Integer bookId, Authentication connectedUser) {
@@ -216,7 +232,17 @@ public class BookService {
                         "You didn't borrow this book"));
 
         bookTransactionHistory.setReturned(true);
-        return transactionHistoryRepository.save(bookTransactionHistory).getId();
+        var saved = transactionHistoryRepository.save(bookTransactionHistory);
+        notificationService.sendNotification(
+                book.getCreatedBy(),
+                Notification.builder()
+                        .status(RETURNED)
+                        .message("Your book has been returned")
+                        .bookTitle(book.getTitle())
+                        .build()
+        );
+
+        return saved.getId();
     }
 
     public Integer approveReturnBorrowedBook(Integer bookId, Authentication connectedUser) {
@@ -241,7 +267,17 @@ public class BookService {
 
         bookTransactionHistory.setReturnApproved(true);
 
-        return transactionHistoryRepository.save(bookTransactionHistory).getId();
+        var saved = transactionHistoryRepository.save(bookTransactionHistory);
+        notificationService.sendNotification(
+                bookTransactionHistory.getCreatedBy(),
+                Notification.builder()
+                        .status(RETURN_APPROVED)
+                        .message("Your book return has been approved")
+                        .bookTitle(book.getTitle())
+                        .build()
+        );
+
+        return saved.getId();
 
     }
 

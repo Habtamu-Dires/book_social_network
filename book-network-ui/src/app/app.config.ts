@@ -5,6 +5,8 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular
 import { routes } from './app.routes';
 import { httpTokenInterceptor } from './services/interceptor/http-token.interceptor';
 import { KeycloakService } from './services/keycloak/keycloak.service';
+import { provideToastr } from 'ngx-toastr';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 export function kcFactory(kcService:KeycloakService) {
   return () => kcService.init();
@@ -17,6 +19,15 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([httpTokenInterceptor])
     ),
+    provideAnimations(),
+    provideToastr({
+      progressBar:true, 
+      closeButton: true,
+      newestOnTop: true,
+      tapToDismiss: true,
+      positionClass: 'toast-top-center',
+      timeOut: 8000
+    }),
     {
       provide: APP_INITIALIZER,
       deps: [KeycloakService],
@@ -28,5 +39,7 @@ export const appConfig: ApplicationConfig = {
       useValue: httpTokenInterceptor,
       multi: true 
     }
-  ]
+  ],
 };
+
+

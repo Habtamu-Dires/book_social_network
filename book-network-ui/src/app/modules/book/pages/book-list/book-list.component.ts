@@ -4,6 +4,7 @@ import { BookService } from '../../../../services/services';
 import { BookResponse, PageResponseBookResponse } from '../../../../services/models';
 import { CommonModule } from '@angular/common';
 import { BookCardComponent } from "../../components/book-card/book-card.component";
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-book-list',
@@ -18,12 +19,11 @@ export class BookListComponent implements OnInit{
   page:number = 0;
   size:number = 3;
   pages:any = [];
-  message:string = '';
-  level:string = 'success';
 
   constructor(
     private router:Router,
-    private bookService:BookService
+    private bookService:BookService,
+    private toastrService:ToastrService
   ){}
 
   ngOnInit(): void {
@@ -46,17 +46,14 @@ export class BookListComponent implements OnInit{
   };
 
   borrowBook(book:BookResponse) {
-    this.message = '';
     this.bookService.borrowBook({
       "book-id": book.id as number
     }).subscribe({
       next:(res) =>{
-        this.message = 'Book successfully added to your list';
-        this.level = 'success';
+        this.toastrService.success('Book successfully added to your list','Done!')
       },
       error:(err) => {
-        this.level = 'error';
-        this.message = err.error.error;
+        this.toastrService.error(err.error.error, 'Oops')
       }
     })
   }

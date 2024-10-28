@@ -4,6 +4,7 @@ import { BookRequest, BookResponse } from '../../../../services/models';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { BookService } from '../../../../services/services';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-manage-book',
@@ -26,7 +27,8 @@ export class ManageBookComponent implements OnInit{
   constructor(
     private bookService:BookService,
     private router:Router,
-    private activatedRoute:ActivatedRoute
+    private activatedRoute:ActivatedRoute,
+    private toastrService: ToastrService
   ){}
 
   ngOnInit(): void {
@@ -78,12 +80,14 @@ export class ManageBookComponent implements OnInit{
           }
         }).subscribe({
           next:() =>{
+              this.toastrService.success('Book successfully saved', 'Done!')
               this.router.navigate(['/books/my-books'])
           }
         })
       },
       error:(err) =>{
         console.log(err);
+        this.toastrService.error('Someting went wrong', 'Ooops')
         this.errorMsg = err.error.validationErrors;
       }
     })
